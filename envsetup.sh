@@ -147,6 +147,13 @@ function check_product()
         echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
         return
     fi
+    if (echo -n $1 | grep -q -e "^citric_") ; then
+        CITRIC_BUILD=$(echo -n $1 | sed -e 's/^citric_//g')
+    else
+        CITRIC_BUILD=
+    fi
+    export CITRIC_BUILD
+
         TARGET_PRODUCT=$1 \
         TARGET_BUILD_VARIANT= \
         TARGET_BUILD_TYPE= \
@@ -695,6 +702,8 @@ function lunch()
         echo "Invalid lunch combo: $selection"
         return 1
     fi
+
+    check_product $product
 
     TARGET_PRODUCT=$product \
     TARGET_BUILD_VARIANT=$variant \
